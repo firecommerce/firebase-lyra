@@ -53,6 +53,7 @@ export default async (req: Request, res: Response) => {
     res.send({
       ...result,
       elapsed: formatNanoseconds(result.elapsed),
+      took: Date.now() - startAt,
     });
   });
 };
