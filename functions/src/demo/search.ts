@@ -2,6 +2,23 @@ import type {Request, Response} from "firebase-functions";
 import {create, insert, search} from "@lyrasearch/lyra";
 import {getFirestore} from "firebase-admin/firestore";
 
+const nano = BigInt(1e3);
+const milli = BigInt(1e6);
+const second = BigInt(1e9);
+const formatNanoseconds = (value: number | bigint): string => {
+  if (typeof value === "number") {
+    value = BigInt(value);
+  }
+  if (value < nano) {
+    return `${value}ns`;
+  } else if (value < milli) {
+    return `${value / nano}μs`;
+  } else if (value < second) {
+    return `${value / milli}ms`;
+  }
+  return `${value / second}s`;
+};
+
 const db = create({
   schema: {
     "date": "string",
@@ -29,9 +46,13 @@ export default async (req: Request, res: Response) => {
     if (!term || typeof term !== "string") {
       term = "sample";
     }
-    res.send(search(db, {
+    const result = search(db, {
       term,
       properties: ["description"],
-    }));
+    });
+    res.send({
+      ...result,
+      elapsed: formatNanoseconds(result.elapsed),
+    });
   });
 };
