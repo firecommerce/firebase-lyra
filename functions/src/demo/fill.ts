@@ -13,7 +13,7 @@ export default async (req: Request, res: Response) => {
     return;
   }
   const startedAt = Date.now();
-  const eventsFilepath = joinPath(process.cwd(), "__fixtures__/events.json");
+  const eventsFilepath = joinPath(process.cwd(), "datasets/events.json");
   const data = JSON.parse(readFileSync(eventsFilepath).toString());
   const events: Record<string, string>[] = data.result.events;
   const parsedAt = Date.now();
