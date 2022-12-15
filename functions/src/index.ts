@@ -1,9 +1,6 @@
-import * as functions from "firebase-functions";
+import {onRequest} from "firebase-functions/v2/https";
+import fillDemo from "./demo/fill";
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+export const fill = onRequest({
+  timeoutSeconds: 1800,
+}, fillDemo);
